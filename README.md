@@ -12,27 +12,25 @@ Cross-repo architecture and decisions live in the `shiba-dev` repo's `docs/`.
 
 ## Setup
 
-Use **Node.js 24** and **pnpm 12.5.1**. `.nvmrc` is provided for nvm and `mise.toml`
+Use **Node.js 24** (npm comes with it). `.nvmrc` is provided for nvm and `mise.toml`
 for mise; neither version manager is required.
 
 ```sh
 node --version # should print v24.x.x
-npm install --global pnpm@12.5.1
-pnpm install --frozen-lockfile
+npm ci
 ```
 
-If you prefer not to install pnpm globally, replace `pnpm` with `npx --yes pnpm@12.5.1`.
-Keep dependency changes in `pnpm-lock.yaml`; do not generate an npm or Yarn lockfile.
+Keep dependency changes in `package-lock.json`; do not generate a pnpm or Yarn lockfile.
 
 No environment variables or credentials are needed.
 
 ## Checks
 
 ```sh
-pnpm test       # run tests once
-pnpm test:watch # rerun tests while editing
-pnpm lint       # Oxlint
-pnpm typecheck  # TypeScript, no emit
+npm test               # run tests once
+npm run test:watch     # rerun tests while editing
+npm run lint           # Oxlint
+npm run typecheck      # TypeScript, no emit
 ```
 
 There is no formatter configured. Match the existing style and run
