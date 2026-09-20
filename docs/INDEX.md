@@ -8,4 +8,4 @@ Status: Current. Formerly `shiba-rules-studio`. `dev/` in this repo is the owner
 
 The old studio product draft is `dev/SHIBA_RULES_STUDIO.md` (gitignored, historical).
 
-Cross-repo docs: the `shiba-dev` repo's `docs/INDEX.md`.
+Cross-repo docs: the `shiba-shared` repo's `docs/INDEX.md`.

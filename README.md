@@ -8,7 +8,7 @@ This repository currently holds the toolchain and a dependency smoke test. The
 validator library and the `sht` CLI are not written yet.
 
 Planned scope and build order: [docs/v1-scope.md](docs/v1-scope.md).
-Cross-repo architecture and decisions live in the `shiba-dev` repo's `docs/`.
+Cross-repo architecture and decisions live in the `shiba-shared` repo's `docs/`.
 
 ## Setup
 
