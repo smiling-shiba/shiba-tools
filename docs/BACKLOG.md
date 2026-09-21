@@ -6,6 +6,8 @@ Convention: `shiba-shared/docs/engineering/backlog-and-ids.md`. Keep "Now" to 3 
 
 ## Now
 
+_Nothing in progress. The toolset is built; what remains waits on decisions in `shiba-shared` (`SH-0002`, `SH-0009`)._
+
 ## Next
 
 
