@@ -16,7 +16,8 @@ import { parseYamlSource } from './yaml-source.ts'
  *   SH602 other build error             SH603 policy failed while loading
  *   SH604 no valid default export       SH605 policy id cannot be used in file names
  *   SH606 invalid --version             SH607 policy version already exists
- *   SH608 policy produced a bad contract  SH650 non-deterministic API in the source (warning)
+ *   SH608 policy produced a bad contract  SH609 locale-dependent API in the source
+ *   SH650 non-deterministic API in the source (warning)
  */
 
 const CALVER = /^(\d{4})\.(0[1-9]|1[0-2])\.(0[1-9]|[12]\d|3[01])\.([1-9]\d*)$/
@@ -35,6 +36,17 @@ const NON_DETERMINISTIC: readonly { pattern: RegExp; what: string }[] = [
   { pattern: /\b(?:setTimeout|setInterval)\s*\(/, what: 'timers' },
   { pattern: /\bprocess\./, what: 'process' },
   { pattern: /\brequire\s*\(/, what: 'require()' },
+]
+
+/**
+ * APIs that depend on the host's locale data. They give different results on
+ * different engines (the server's embedded engine has no locale support), so a
+ * policy may not use them. Text shown to players belongs in the app, not in rules.
+ */
+const LOCALE_DEPENDENT: readonly { pattern: RegExp; what: string }[] = [
+  { pattern: /\.localeCompare\s*\(/, what: 'localeCompare()' },
+  { pattern: /\.toLocale\w*\s*\(/, what: 'toLocaleString() and the other toLocale...() methods' },
+  { pattern: /\bIntl\b/, what: 'Intl' },
 ]
 
 /** Runs in a child Node process so the policy's code never runs inside sht itself. */
@@ -116,7 +128,7 @@ function isBuildFailure(error: unknown): error is { errors: Message[] } {
   return isRecord(error) && Array.isArray(error.errors)
 }
 
-function scanForNonDeterminism(inputs: readonly string[], cwd: string): Diagnostic[] {
+function scanSource(inputs: readonly string[], cwd: string): Diagnostic[] {
   const found: Diagnostic[] = []
   for (const input of inputs) {
     if (input.split(/[\\/]/).includes('node_modules') || !/\.(?:[cm]?[jt]s)$/.test(input)) continue
@@ -125,6 +137,12 @@ function scanForNonDeterminism(inputs: readonly string[], cwd: string): Diagnost
     readFileSync(path, 'utf8').split('\n').forEach((text, index) => {
       const trimmed = text.trim()
       if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) return
+      for (const { pattern, what } of LOCALE_DEPENDENT) {
+        const match = pattern.exec(text)
+        if (match) {
+          found.push(diagnostic(input, 'error', 'SH609', `${what} depends on the host's locale and gives different results on different engines; policies must not use it (compare code points, and keep player-facing text out of the rules)`, index + 1, match.index + 1))
+        }
+      }
       for (const { pattern, what } of NON_DETERMINISTIC) {
         const match = pattern.exec(text)
         if (match) {
@@ -240,11 +258,12 @@ export async function buildPolicy(options: BuildPolicyOptions): Promise<BuildPol
       absWorkingDir: cwd,
     })
     bundle = output.outputFiles[0]?.text ?? ''
-    diagnostics.push(...scanForNonDeterminism(Object.keys(output.metafile.inputs), cwd))
+    diagnostics.push(...scanSource(Object.keys(output.metafile.inputs), cwd))
   } catch (error) {
     if (!isBuildFailure(error)) throw error
     return failure(error.errors.map((message) => fromBuildMessage(message, entryLabel)))
   }
+  if (diagnostics.some((found) => found.severity === 'error')) return failure(diagnostics)
 
   const sha256 = createHash('sha256').update(bundle).digest('hex')
   const identity = runLoader(bundle, { mode: 'id' })

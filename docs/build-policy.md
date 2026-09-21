@@ -32,6 +32,7 @@ It then tells you to set `policy: <name>` in `pack.yml`, unless that is already 
 | SH606 | error | `--version` is not a calver |
 | SH607 | error | That version already exists (use `--force`) |
 | SH608 | error | The policy produced an invalid contract |
+| SH609 | error | Locale-dependent API in your own source: `localeCompare`, `toLocaleString` and the other `toLocale...` methods, or `Intl`. These give different results on different engines, and the server's engine has no locale support. Compare code points instead, and keep player-facing text (translations, number formatting) in the app, not in the rules |
 | SH650 | warning | Non-deterministic API in your own source (`Math.random`, `Date.now`, `new Date`, `performance.now`, `fetch`, timers, `process`, `require`) |
 
 `definePolicy` already rejects bad names, reserved fields and unknown references when the policy loads, so those show up as SH603 with the full list of problems.

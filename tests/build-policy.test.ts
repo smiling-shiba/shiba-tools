@@ -187,4 +187,16 @@ describe('problems', () => {
     expect(result.diagnostics[0]?.message).toContain('Math.random()')
     expect(files(pack)).toHaveLength(2)
   })
+
+  it('fails on locale-dependent APIs and points at each one', async () => {
+    const { result, pack } = await failsWith(variant('locale.ts'))
+    expect(result.status).toBe('failed')
+    expect(result.diagnostics).toMatchObject([
+      { severity: 'error', code: 'SH609', line: 4 },
+      { severity: 'error', code: 'SH609', line: 5 },
+      { severity: 'error', code: 'SH609', line: 6 },
+    ])
+    expect(result.diagnostics.map((found) => found.message).join('\n')).toMatch(/localeCompare[\s\S]*toLocaleString[\s\S]*Intl/)
+    expect(files(pack)).toEqual([])
+  })
 })
