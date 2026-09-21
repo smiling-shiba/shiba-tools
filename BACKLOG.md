@@ -8,10 +8,10 @@ Convention: `shiba-shared/docs/engineering/backlog-and-ids.md`. Keep "Now" to 3 
 
 ## Next
 
-- [ ] `ST-0013` [SS-01] Confirm autocomplete by hand in VS Code (see `docs/vscode.md`) and fix anything that does not appear. Consider a watch mode that regenerates schemas.
 
 ## Later / Ideas
 
+- [ ] `ST-0014` [SS-01] Watch mode: revalidate and regenerate editor schemas when files change.
 - [ ] `ST-0010` [SS-01] `sht build-policy`: policy source to `policies/<id>-policy-<calver>.js` + `.contract.json` + hash. Generates the calver.
 - [ ] `ST-0011` [SS-01] `sht pack` and `sht verify`.
 - [ ] `ST-0005` [SS-01] Canonicalize templates (YAML 1.2, sorted keys, RFC 8785 JSON) and hash them, as part of `sht pack`.
@@ -26,6 +26,7 @@ Convention: `shiba-shared/docs/engineering/backlog-and-ids.md`. Keep "Now" to 3 
 
 ## Done (recent)
 
+- [x] `ST-0013` Confirmed autocomplete by hand in VS Code (Red Hat YAML 1.24.0): hook, function and argument completion, step and template snippets, reference ids, and error squiggles.
 - [x] `ST-0009` Fixtures: `tests/fixtures/toy-pack` (valid) and `broken-pack` (one broken template per problem), neutral toy domain.
 - [x] `ST-0001` Validator library: YAML parsing with line/column diagnostics, schema checks, references, duplicates.
 - [x] `ST-0002` Function, hook and argument checks against `contract.json`, with "did you mean" suggestions.

@@ -11,7 +11,7 @@ Author packs (a policy, YAML templates and assets) and get precise errors when a
 1. **Contract** (in `shiba-core`): generate `contract.json` from a policy definition. *Not started; the validator uses a hand-written fixture contract.*
 2. **Validator library:** parse YAML, check schemas, resolve references, check function and hook names and arguments against the contract, with file/line/column diagnostics and "did you mean" suggestions. *Done.*
 3. **`sht validate`:** headless, used by CI. *Done.*
-4. **`sht schemas`:** generate JSON Schemas so VS Code gives autocomplete, snippets and squiggles. *Done; not yet confirmed by hand in the editor.*
+4. **`sht schemas`:** generate JSON Schemas so VS Code gives autocomplete, snippets and squiggles. *Done; confirmed in VS Code.*
 5. **`sht build-policy`:** policy source to a bundle plus contract, with a generated calver.
 6. **`sht pack` and `sht verify`.**
 7. **`sht sign`:** signs the policy hash (and, for the official ladder, the whole pack). Runs in CI only, with the key held as a CI secret.

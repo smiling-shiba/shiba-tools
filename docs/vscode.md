@@ -1,6 +1,6 @@
 # Autocomplete in VS Code
 
-Status: Current. Generated schemas are tested against `sht validate`; behavior inside VS Code itself (completions, snippets, hover text) has not been confirmed by hand yet, see `ST-0013` in the backlog.
+Status: Current. Generated schemas are tested against `sht validate`, and the behavior below was confirmed by hand in VS Code with the Red Hat YAML extension (1.24.0).
 
 ## Setup
 

@@ -6,7 +6,7 @@ Status: Current. `dev/` in this repo is local, gitignored scratch space and not 
 |---|---|
 | [v1-scope.md](v1-scope.md): scope and build order | Current |
 | [validation.md](validation.md): what `sht validate` checks, diagnostic codes | Current |
-| [vscode.md](vscode.md): autocomplete in VS Code via generated schemas | Current (editor behavior unconfirmed) |
+| [vscode.md](vscode.md): autocomplete in VS Code via generated schemas | Current |
 
 
 Cross-repo docs: the `shiba-shared` repo's `docs/INDEX.md`.
