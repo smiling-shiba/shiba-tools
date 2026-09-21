@@ -1,0 +1,9 @@
+kind: entity
+id: typo-function
+name: Typo Function
+on: created
+do:
+  - fn: set_valeu
+    args:
+      key: weight
+      value: 5

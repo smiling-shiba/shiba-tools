@@ -1,0 +1,7 @@
+id: toy-pack
+version: 2026.09.19.1
+policy: toy-policy-2026.09.19.1
+sdk:
+  range: ">=0.1.0 <0.2.0"
+templates: templates/**/*.yml
+assets: assets/

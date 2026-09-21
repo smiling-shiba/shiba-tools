@@ -1,0 +1,9 @@
+kind: entity
+id: lamp
+name: Lamp
+
+on: updated
+do:
+  - fn: emit
+    args:
+      event: lamp_changed

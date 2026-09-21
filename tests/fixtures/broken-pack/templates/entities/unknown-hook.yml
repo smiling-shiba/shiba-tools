@@ -1,0 +1,8 @@
+kind: entity
+id: unknown-hook
+name: Unknown Hook
+on: creatd
+do:
+  - fn: emit
+    args:
+      event: hello

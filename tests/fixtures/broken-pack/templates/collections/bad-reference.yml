@@ -1,0 +1,3 @@
+kind: collection
+id: bad-refs
+entities: [crate, lamp2]

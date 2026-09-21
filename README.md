@@ -1,11 +1,12 @@
 # shiba-tools
 
-Command-line tooling (alias `sht`) for Smiling Shiba rulesets. It will validate YAML
-rulesets against the contract that `shiba-core` emits (handler names, argument
-schemas, engine version) and, in CI, sign the result for official use.
+Command-line tooling (alias `sht`) for Smiling Shiba packs: a policy (rules as code),
+YAML templates and assets. It validates templates against the policy's contract (kinds,
+functions, hooks, argument schemas) and generates editor schemas. Building policies, packing,
+signing and verifying are planned.
 
-This repository currently holds the toolchain and a dependency smoke test. The
-validator library and the `sht` CLI are not written yet.
+Today it can validate a pack (`sht validate`) and generate editor schemas (`sht schemas`).
+The rest is tracked in `BACKLOG.md`.
 
 Planned scope and build order: [docs/v1-scope.md](docs/v1-scope.md).
 Cross-repo architecture and decisions live in the `shiba-shared` repo's `docs/`.
@@ -23,6 +24,19 @@ npm ci
 Keep dependency changes in `package-lock.json`; do not generate a pnpm or Yarn lockfile.
 
 No environment variables or credentials are needed.
+
+## Usage
+
+```sh
+npm run sht -- validate <packDir>          # human-readable diagnostics
+npm run sht -- validate <packDir> --json   # machine-readable
+npm run sht -- schemas <packDir>           # editor schemas for VS Code autocomplete
+```
+
+Exit codes: 0 no errors (warnings allowed), 1 errors found, 2 bad usage. A pack is a
+folder with `pack.yml`, `policies/`, `templates/` and `assets/`; the format is described in
+`shiba-core/docs/pack-format.md`. Sample packs live in `tests/fixtures/`. Diagnostic codes
+are listed in [docs/validation.md](docs/validation.md). Editor setup: [docs/vscode.md](docs/vscode.md).
 
 ## Checks
 
@@ -48,7 +62,8 @@ New packages need approval. See `AGENTS.md`.
 
 ## Layout
 
-- `tests/`: tests
+- `src/`: the validator library and the `sht` command line
+- `tests/`: tests, plus `tests/fixtures/toy-pack` (valid) and `tests/fixtures/broken-pack` (one broken template per problem)
 - `docs/`: tooling docs (`v1-scope.md`)
 - `AGENTS.md`: engineering rules for agents
-- `dev/`: the owner's private, gitignored scratch pad. Do not use.
+- `dev/`: local, gitignored scratch space; not part of the project.

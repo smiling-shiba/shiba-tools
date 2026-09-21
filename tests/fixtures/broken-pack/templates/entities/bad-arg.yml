@@ -1,0 +1,9 @@
+kind: entity
+id: bad-arg
+name: Bad Arg
+on: created
+do:
+  - fn: set_value
+    args:
+      key: weight
+      value: heavy

@@ -9,6 +9,10 @@ node_modules
 dist
 *.local
 
+# Generated editor files (from `sht schemas`), including inside test fixtures
+.shiba/
+tests/fixtures/*/.vscode/
+
 # Editor and OS files
 .vscode/*
 !.vscode/extensions.json

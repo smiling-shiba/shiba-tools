@@ -7,7 +7,8 @@
     "lint": "oxlint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "sht": "node src/bin.ts"
   },
   "dependencies": {
     "ajv": "^8.20.0",

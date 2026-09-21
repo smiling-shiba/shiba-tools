@@ -1,42 +1,40 @@
-# Shiba Tools (`sht`): v1 Scope
+# Shiba Tools (`sht`): Scope
 
-Status: Current. `shiba-tools` is a command-line tool. There is no studio UI.
-
-The long product draft this replaces (`dev/SHIBA_RULES_STUDIO.md`, gitignored) described a visual Rules Studio. That direction was dropped: for a solo author, validating and signing does not need a GUI.
+Status: Current. `shiba-tools` is a command-line tool. Editing happens in VS Code; there is no graphical editor.
 
 ## Goal
 
-Author YAML rulesets for Smiling Shiba and get precise errors when they reference handlers or arguments that do not exist, before anything reaches a match. In CI, sign the validated result for official use.
+Author packs (a policy, YAML templates and assets) and get precise errors when a template refers to a function, hook, kind or argument that does not exist, before anything reaches a match. In CI, sign the result for official use. Format: `shiba-core/docs/pack-format.md`.
 
 ## Build order
 
-1. **Contract** (in `shiba-core`): emit `manifest.json` and `api-schema.json` from the engine build. See `shiba-core/docs/handlers-and-manifest.md`.
-2. **Validator library:** parse YAML, check schema, resolve references, check handlers against the manifest. Diagnostics carry file, line, column, code and a suggestion ("Did you mean `on_card_drawn`?").
-3. **`sht` CLI:** `validate` and `build` commands using the validator. Headless, used by CI.
-4. **Editor support without a UI:** point VS Code's YAML support at the generated JSON Schema for autocomplete, hover and red squiggles.
-5. **`sht sign`:** signs the ruleset hash and the engine bundle hash together. Runs in CI only, with the key held as a CI secret.
+1. **Contract** (in `shiba-core`): generate `contract.json` from a policy definition. *Not started; the validator uses a hand-written fixture contract.*
+2. **Validator library:** parse YAML, check schemas, resolve references, check function and hook names and arguments against the contract, with file/line/column diagnostics and "did you mean" suggestions. *Done.*
+3. **`sht validate`:** headless, used by CI. *Done.*
+4. **`sht schemas`:** generate JSON Schemas so VS Code gives autocomplete, snippets and squiggles. *Done; not yet confirmed by hand in the editor.*
+5. **`sht build-policy`:** policy source to a bundle plus contract, with a generated calver.
+6. **`sht pack` and `sht verify`.**
+7. **`sht sign`:** signs the policy hash (and, for the official ladder, the whole pack). Runs in CI only, with the key held as a CI secret.
 
-**Hello world:** open a YAML file with `hook: on_card_drwawn`, get a "did you mean" diagnostic, fix it, and the build passes.
+**Hello world:** a template with `fn: set_valeu` gets a "did you mean `set_value`" diagnostic; fix it and validation passes.
 
 ## Out of scope
 
-- Any GUI: editor, forms, docs browser, simulator, Tauri host.
-- Monaco, Storybook, Playwright, Docusaurus, typedoc.
-- File watching and hot-reload.
-- Example games other than Smiling Shiba.
-- Simulation. Rule behavior is tested in `shiba-core`'s own headless tests.
-- Guide/Shiba Daemon authoring.
+- Any graphical tool: editor, forms, docs browser, simulator.
+- Simulation. Rule behavior is tested in `shiba-core`.
+- Game content. Examples and fixtures use a neutral toy domain.
 
-If a real need for a UI appears later, that is a new decision and a new spec.
+If a need for a graphical tool appears later, that is a new decision and a new design doc.
 
-## Principles kept from the original draft
+## Principles
 
-- The tool never inspects bundle source; it reads the generated contract.
-- CLI and any future UI share one compiler and validator. No second copy of validation logic.
-- Schema diagnostics and semantic (handler) diagnostics are distinguishable.
-- Loaded engine bundles are executable code. Trusted local bundles only for now.
+- The tool reads the generated contract; it never inspects or runs policy bundle source.
+- The command line and any future tool share one validator library. No second copy of validation logic.
+- Schema diagnostics and semantic (function, hook, reference) diagnostics are distinguishable.
+- A loaded policy bundle is executable code. Trusted local bundles only for now.
 
 ## Open
 
-- Where the validator package lives (this repo or `shiba-core`).
-- Whether `sht` also builds and publishes the canonical ruleset JSON, or only validates and signs.
+- Where the validator library lives: this repo or `shiba-core`.
+- Whether `sht` also emits the canonical template JSON, or only validates and signs.
+- A watch mode that revalidates and regenerates schemas as files change.

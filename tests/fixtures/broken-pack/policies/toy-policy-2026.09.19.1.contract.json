@@ -1,0 +1,58 @@
+{
+  "policy": { "id": "toy", "version": "2026.09.19.1", "sha256": "fixture" },
+  "sdk": { "version": "0.1.0" },
+  "kinds": {
+    "entity": {
+      "schema": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "collection": {
+      "schema": {
+        "type": "object",
+        "required": ["entities"],
+        "properties": {
+          "entities": { "type": "array", "items": { "type": "string", "x-shiba-ref": "entity" } }
+        }
+      }
+    }
+  },
+  "hooks": {
+    "created": { "title": "Created" },
+    "updated": { "title": "Updated" }
+  },
+  "functions": {
+    "set_value": {
+      "title": "Set value",
+      "args": {
+        "type": "object",
+        "required": ["key", "value"],
+        "properties": {
+          "key": { "type": "string", "minLength": 1 },
+          "value": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "add_tag": {
+      "title": "Add tag",
+      "args": {
+        "type": "object",
+        "required": ["tag"],
+        "properties": { "tag": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "emit": {
+      "title": "Emit event",
+      "args": {
+        "type": "object",
+        "required": ["event"],
+        "properties": { "event": { "type": "string", "minLength": 1 } }
+      }
+    }
+  }
+}

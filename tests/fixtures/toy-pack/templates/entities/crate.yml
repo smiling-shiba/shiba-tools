@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=../../.shiba/template.schema.json
+kind: entity
+id: crate
+name: Crate
+tags: [container]
+
+on: created
+do:
+  - fn: set_value
+    args:
+      key: weight
+      value: 5
+  - fn: add_tag
+    args:
+      tag: heavy

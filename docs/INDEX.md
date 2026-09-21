@@ -1,11 +1,12 @@
 # shiba-tools Docs
 
-Status: Current. Formerly `shiba-rules-studio`. `dev/` in this repo is the owner's private scratch pad; agents do not write there unless asked.
+Status: Current. `dev/` in this repo is local, gitignored scratch space and not part of the project docs.
 
 | Doc | Status |
 |---|---|
-| [v1-scope.md](v1-scope.md): CLI-first scope and build order | Current |
+| [v1-scope.md](v1-scope.md): scope and build order | Current |
+| [validation.md](validation.md): what `sht validate` checks, diagnostic codes | Current |
+| [vscode.md](vscode.md): autocomplete in VS Code via generated schemas | Current (editor behavior unconfirmed) |
 
-The old studio product draft is `dev/SHIBA_RULES_STUDIO.md` (gitignored, historical).
 
 Cross-repo docs: the `shiba-shared` repo's `docs/INDEX.md`.

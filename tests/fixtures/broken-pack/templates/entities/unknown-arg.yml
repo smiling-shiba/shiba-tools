@@ -1,0 +1,9 @@
+kind: entity
+id: unknown-arg
+name: Unknown Arg
+on: created
+do:
+  - fn: set_value
+    args:
+      key: weight
+      valeu: 3
