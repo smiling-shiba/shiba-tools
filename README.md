@@ -5,8 +5,8 @@ YAML templates and assets. It validates templates against the policy's contract 
 functions, hooks, argument schemas) and generates editor schemas. Building policies, packing,
 signing and verifying are planned.
 
-Today it can validate a pack (`sht validate`) and generate editor schemas (`sht schemas`).
-The rest is tracked in `BACKLOG.md`.
+Today it can validate a pack, generate editor schemas, build a policy, and lock, sign and verify a pack.
+The rest is tracked in `docs/BACKLOG.md`.
 
 Planned scope and build order: [docs/v1-scope.md](docs/v1-scope.md).
 Cross-repo architecture and decisions live in the `shiba-shared` repo's `docs/`.
@@ -31,12 +31,17 @@ No environment variables or credentials are needed.
 npm run sht -- validate <packDir>          # human-readable diagnostics
 npm run sht -- validate <packDir> --json   # machine-readable
 npm run sht -- schemas <packDir>           # editor schemas for VS Code autocomplete
+npm run sht -- build-policy <source> --pack <packDir>   # bundle a policy into <packDir>/policies/
+npm run sht -- pack <packDir>              # list every file with its hash in pack.lock.json
+npm run sht -- keygen <name> --out <dir>   # make a signing key pair
+npm run sht -- sign <packDir> --key <file> # sign the lock
+npm run sht -- verify <packDir> --trust <publicKey>
 ```
 
 Exit codes: 0 no errors (warnings allowed), 1 errors found, 2 bad usage. A pack is a
 folder with `pack.yml`, `policies/`, `templates/` and `assets/`; the format is described in
-`shiba-core/docs/pack-format.md`. Sample packs live in `tests/fixtures/`. Diagnostic codes
-are listed in [docs/validation.md](docs/validation.md). Editor setup: [docs/vscode.md](docs/vscode.md).
+`shiba-sdk/docs/pack-format.md`. Sample packs live in `tests/fixtures/`. Diagnostic codes
+are listed in [docs/validation.md](docs/validation.md). Editor setup: [docs/vscode.md](docs/vscode.md). Building a policy: [docs/build-policy.md](docs/build-policy.md). Signing: [docs/signing.md](docs/signing.md).
 
 ## Checks
 
@@ -55,6 +60,7 @@ committing.
 
 - `typebox`, `ajv`, `ajv-formats`: schemas and validation
 - `yaml`: parsing, with comment-preserving edits
+- `esbuild`: bundling policies (`sht build-policy`)
 - `vitest`, `fast-check`: tests and property tests
 - `typescript`, `oxlint`, `@types/node`: tooling
 

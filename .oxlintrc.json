@@ -1,4 +1,5 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "oxc"]
+  "plugins": ["typescript", "oxc"],
+  "ignorePatterns": ["tests/fixtures/policy-src/variants/syntax-error.ts"]
 }

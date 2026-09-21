@@ -14,9 +14,13 @@ const PACK_FIELDS = ['id', 'version', 'policy', 'sdk', 'templates', 'assets']
 const POLICY_NAME = /^[A-Za-z0-9._-]+$/
 
 export interface PackConfig {
+  id: string
+  version: string
   policy: string
   sdkRange: string
   templates: string
+  /** Folder of assets, relative to the pack. Defaults to `assets/`. */
+  assets: string
 }
 
 export function readPackConfig(packDir: string, report: Report): { where: Located; config: PackConfig } | undefined {
@@ -49,8 +53,8 @@ export function readPackConfig(packDir: string, report: Report): { where: Locate
       valid = false
     }
   }
-  requireString('id', ['id'], data)
-  requireString('version', ['version'], data)
+  const id = requireString('id', ['id'], data)
+  const version = requireString('version', ['version'], data)
   const policy = requireString('policy', ['policy'], data)
   const templates = requireString('templates', ['templates'], data)
   let sdkRange = ''
@@ -67,7 +71,14 @@ export function readPackConfig(packDir: string, report: Report): { where: Locate
     report.at(where, data.sdk === undefined ? [] : ['sdk'], 'value', 'error', 'SH011',
       data.sdk === undefined ? 'Missing required field "sdk"' : '"sdk" must be a mapping with a "range"')
   }
-  return valid ? { where, config: { policy, sdkRange, templates } } : undefined
+  let assets = 'assets/'
+  if (typeof data.assets === 'string') {
+    assets = data.assets
+  } else if (data.assets !== undefined) {
+    valid = false
+    report.at(where, ['assets'], 'value', 'error', 'SH011', '"assets" must be a folder name')
+  }
+  return valid ? { where, config: { id, version, policy, sdkRange, templates, assets } } : undefined
 }
 
 export function loadContract(packDir: string, config: PackConfig, pack: Located, report: Report): Contract | undefined {

@@ -1,6 +1,6 @@
 # Validation: what `sht validate` checks
 
-Status: Current for what is implemented. Design: `shiba-core/docs/pack-format.md`.
+Status: Current for what is implemented. Design: `shiba-sdk/docs/pack-format.md`.
 
 `sht validate <packDir>` reads `pack.yml`, finds the active policy's contract in `policies/`, and checks every template against it. It never reads or runs the policy bundle. It reports every problem it can find, sorted by file and position.
 

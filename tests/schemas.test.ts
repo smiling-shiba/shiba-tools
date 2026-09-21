@@ -163,24 +163,24 @@ describe('writeSchemas', () => {
 })
 
 describe('sht schemas', () => {
-  const run = (...argv: string[]): { code: number; out: string; err: string } => {
+  const run = async (...argv: string[]): Promise<{ code: number; out: string; err: string }> => {
     const out: string[] = []
     const err: string[] = []
-    const code = main(argv, { out: (text) => out.push(text), err: (text) => err.push(text) })
+    const code = await main(argv, { out: (text) => out.push(text), err: (text) => err.push(text) })
     return { code, out: out.join('\n'), err: err.join('\n') }
   }
 
-  it('reports what it wrote and how to use it', () => {
+  it('reports what it wrote and how to use it', async () => {
     const pack = tempCopy()
-    const result = run('schemas', pack)
+    const result = await run('schemas', pack)
     expect(result.code).toBe(0)
     expect(result.out).toContain('Wrote .shiba/template.schema.json')
     expect(result.out).toContain('Created .vscode/settings.json')
     expect(result.out).toContain('YAML" extension by Red Hat')
   })
 
-  it('exits 1 with the diagnostics when the pack does not load', () => {
-    const result = run('schemas', join(tmpdir(), 'sht-no-such-pack'))
+  it('exits 1 with the diagnostics when the pack does not load', async () => {
+    const result = await run('schemas', join(tmpdir(), 'sht-no-such-pack'))
     expect(result.code).toBe(1)
     expect(result.out).toContain('SH011')
   })

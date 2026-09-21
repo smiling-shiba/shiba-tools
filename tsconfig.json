@@ -16,5 +16,9 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "tests", "vitest.config.ts"]
+  "include": ["src", "tests", "vitest.config.ts"],
+  "exclude": [
+    "tests/fixtures/policy-src/variants/syntax-error.ts",
+    "tests/fixtures/policy-src/variants/missing-import.ts"
+  ]
 }
