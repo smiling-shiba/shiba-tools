@@ -8,7 +8,7 @@ sht build-policy <policySource> [--pack <packDir>] [--version <calver>] [--force
 
 Builds a policy source file (TypeScript or JavaScript that default-exports `definePolicy(...)` from `shiba-sdk`) into `<packDir>/policies/` (default: the current folder):
 
-- `<id>-policy-<calver>.js`: one minified ES module with everything bundled in
+- `<id>-policy-<calver>.js`: one minified script with everything bundled in. It sets the global `shibaPolicy`; the policy is `shibaPolicy.default`
 - `<id>-policy-<calver>.contract.json`: the generated contract, including the bundle's SHA-256
 
 It then tells you to set `policy: <name>` in `pack.yml`, unless that is already set. It never edits `pack.yml`.
@@ -41,5 +41,5 @@ It then tells you to set `policy: <name>` in `pack.yml`, unless that is already 
 - **It runs your policy code**, in a separate Node process, to read its definition. Only build code you trust.
 - **It does not type-check.** Types are stripped, not verified. Run the TypeScript compiler in your project for that.
 - **The determinism scan is a heuristic.** It reads only your own files (not `node_modules`), skips comment lines, and can miss or over-report. It warns; it never fails the build.
-- **ES module output.** The bundle uses `export default`. Whether the embedded runtime in `shiba-mps` loads that form is checked in its spike (`MP-0001`).
+- **Script output, not an ES module.** The `MP-0001` spike found that the embedded runtime in `shiba-mps` cannot return a module's `export default`. A script that sets `shibaPolicy` works in any host: run it, then read `shibaPolicy.default`.
 - **Not yet:** signing (`sht sign`), packing (`sht pack`), and an automated test against the real SDK. Tests use a small stand-in for the SDK; the real one was checked by hand in a scratch project (see the backlog).

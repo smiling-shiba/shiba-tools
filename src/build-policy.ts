@@ -22,6 +22,8 @@ import { parseYamlSource } from './yaml-source.ts'
 const CALVER = /^(\d{4})\.(0[1-9]|1[0-2])\.(0[1-9]|[12]\d|3[01])\.([1-9]\d*)$/
 const POLICY_ID = /^[a-z0-9][a-z0-9_-]*$/i
 const RESULT_MARKER = '@@SHT-RESULT@@'
+/** The bundle is a plain script that sets this global to the policy's exports (`.default` is the policy). */
+const BUNDLE_GLOBAL = 'shibaPolicy'
 
 /** APIs whose results differ between runs or hosts. A policy must be deterministic. */
 const NON_DETERMINISTIC: readonly { pattern: RegExp; what: string }[] = [
@@ -37,14 +39,16 @@ const NON_DETERMINISTIC: readonly { pattern: RegExp; what: string }[] = [
 
 /** Runs in a child Node process so the policy's code never runs inside sht itself. */
 const LOADER = `
+import vm from 'node:vm'
 const chunks = []
 for await (const chunk of process.stdin) chunks.push(chunk)
 const source = Buffer.concat(chunks).toString('utf8')
 const request = JSON.parse(process.argv[1])
 const send = (value) => process.stdout.write('\\n${RESULT_MARKER}' + JSON.stringify(value))
 try {
-  const loaded = await import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'))
-  const policy = loaded.default
+  const context = vm.createContext({})
+  vm.runInContext(source, context, { timeout: 10_000 })
+  const policy = vm.runInContext('${BUNDLE_GLOBAL}', context)?.default
   if (typeof policy !== 'object' || policy === null || typeof policy.id !== 'string' || typeof policy.contract !== 'function') {
     send({ ok: false, code: 'SH604', message: 'The policy file must export the result of definePolicy(...) as its default export' })
   } else if (request.mode === 'id') {
@@ -222,7 +226,8 @@ export async function buildPolicy(options: BuildPolicyOptions): Promise<BuildPol
       entryPoints: [entry],
       bundle: true,
       write: false,
-      format: 'esm',
+      format: 'iife',
+      globalName: BUNDLE_GLOBAL,
       platform: 'neutral',
       target: 'es2022',
       minify: true,

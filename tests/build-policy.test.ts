@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto'
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import vm from 'node:vm'
 import { fileURLToPath } from 'node:url'
 import { afterEach, describe, expect, it } from 'vitest'
 import { buildPolicy } from '../src/build-policy.ts'
@@ -27,7 +28,7 @@ describe('building a policy', () => {
     expect(files(pack)).toEqual(['demo-policy-2026.09.19.1.contract.json', 'demo-policy-2026.09.19.1.js'])
   })
 
-  it('bundles imported files into one minified module and strips TypeScript types', async () => {
+  it('bundles imported files into one minified script and strips TypeScript types', async () => {
     const pack = emptyTempDir()
     await buildPolicy({ entry: good, packDir: pack, now: sept19 })
     const bundle = readFileSync(join(pack, 'policies/demo-policy-2026.09.19.1.js'), 'utf8')
@@ -35,6 +36,16 @@ describe('building a policy', () => {
     expect(bundle).not.toContain(': string')
     expect(bundle).toContain('demo')
     expect(bundle.trim().split('\n')).toHaveLength(1)
+  })
+
+  it('writes a plain script, not an ES module, that sets one global to the policy', async () => {
+    const pack = emptyTempDir()
+    await buildPolicy({ entry: good, packDir: pack, now: sept19 })
+    const bundle = readFileSync(join(pack, 'policies/demo-policy-2026.09.19.1.js'), 'utf8')
+    expect(bundle).not.toMatch(/\bexport\b/)
+    const context = vm.createContext({})
+    vm.runInContext(bundle, context)
+    expect(vm.runInContext('shibaPolicy.default.id', context)).toBe('demo')
   })
 
   it('records the version and the bundle hash in a valid contract', async () => {

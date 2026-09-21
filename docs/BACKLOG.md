@@ -29,7 +29,7 @@ _Nothing in progress. The toolset is built; what remains waits on decisions in `
 ## Done (recent)
 
 - [x] `ST-0011`, `ST-0005`, `ST-0006` `sht pack`, `keygen`, `sign` and `verify`: `pack.lock.json` (every file hashed; YAML and JSON in canonical form so comments and formatting do not matter) and `pack.sig.json` (ed25519 over the canonical lock), with `--trust` and `--require-signature`. Uses Node crypto; no new packages.
-- [x] `ST-0010` `sht build-policy`: esbuild bundle (platform-neutral ES module) plus generated contract with the bundle hash, generated calver, unchanged-source detection, host-import rejection and a determinism warning scan. Checked end to end with the real SDK.
+- [x] `ST-0010` `sht build-policy`: esbuild bundle (platform-neutral script) plus generated contract with the bundle hash, generated calver, unchanged-source detection, host-import rejection and a determinism warning scan. Checked end to end with the real SDK.
 - [x] `ST-0013` Confirmed autocomplete by hand in VS Code (Red Hat YAML 1.24.0): hook, function and argument completion, step and template snippets, reference ids, and error squiggles.
 - [x] `ST-0009` Fixtures: `tests/fixtures/toy-pack` (valid) and `broken-pack` (one broken template per problem), neutral toy domain.
 - [x] `ST-0001` Validator library: YAML parsing with line/column diagnostics, schema checks, references, duplicates.
