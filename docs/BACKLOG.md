@@ -6,7 +6,7 @@ Convention: `shiba-shared/docs/engineering/backlog-and-ids.md`. Keep "Now" to 3 
 
 ## Now
 
-_Nothing in progress. The toolset is built; what remains waits on decisions in `shiba-shared` (`SH-0002`, `SH-0009`)._
+_Nothing in progress. The toolset is built. `SH-0002` and `SH-0009` are both decided now (`shiba-sdk` is on npm as `@smiling-shiba/sdk`; mods are data-only, D-45) — nothing here still waits on them._
 
 ## Next
 
@@ -15,7 +15,7 @@ _Nothing in progress. The toolset is built; what remains waits on decisions in `
 
 - [ ] `ST-0017` [SS-01] Key rotation and revocation, and passphrase-protected private keys.
 - [ ] `ST-0018` [SS-01] Check `sht verify` inside the app's pack loader (`SA-0013`), with a folder of trusted keys.
-- [ ] `ST-0015` [SS-01] Automated test of `build-policy` against the real `shiba-sdk` (checked by hand for now). Waits on how the SDK is distributed (`SH-0002`).
+- [ ] `ST-0015` [SS-01] Automated test of `build-policy` against the real `shiba-sdk` (checked by hand for now). Unblocked: `shiba-sdk` is on npm as `@smiling-shiba/sdk` (D-44).
 - [ ] `ST-0016` [SS-01] `build-policy --activate` to set `policy:` in `pack.yml`.
 - [ ] `ST-0014` [SS-01] Watch mode: revalidate and regenerate editor schemas when files change.
 - [ ] `ST-0012` [SS-01] Check that asset paths referenced by templates exist.
@@ -24,7 +24,7 @@ _Nothing in progress. The toolset is built; what remains waits on decisions in `
 
 ## Blocked
 
-- Nothing. The fixtures use a hand-written contract; `shiba-sdk` now generates an identical one (`SK-0003`, checked by hand). An automated cross-repo test waits on how the SDK is distributed (`SH-0002`).
+- Nothing.
 
 ## Done (recent)
 
